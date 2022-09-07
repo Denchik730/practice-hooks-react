@@ -1,4 +1,4 @@
-import {Component, useState} from 'react';
+import {Component, useState, useEffect} from 'react';
 import {Container} from 'react-bootstrap';
 import './App.css';
 // class Slider extends Component {
@@ -9,6 +9,14 @@ import './App.css';
 //             autoplay: false,
 //             slide: 0
 //         }
+//     }
+
+//     componentDidMount() {
+//         document.title = `Slide: ${this.state.slide}`;
+//     }
+
+//     componentDidUpdate() {
+//         document.title = `Slide: ${this.state.slide}`;
 //     }
 
 //     changeSlide = (i) => {
@@ -45,16 +53,28 @@ import './App.css';
 //         )
 //     }
 // }
-const calcValue = () => {
-    console.log('random');
 
-    return Math.random() * (50 - 1) + 1;
-}
 
 const Slider = (props) => {
 
-    const [slide, setSlide] = useState(calcValue);
+    const [slide, setSlide] = useState(0);
     const [autoplay, setAutoplay] = useState(false);
+
+    function logging() {
+        console.log('log!');
+    }
+
+    useEffect(() => {
+        console.log("effect");
+        document.title = `Slide: ${slide}`;
+
+        window.addEventListener('click', logging);
+
+        return () => {
+            window.removeEventListener('click', logging);
+        }
+
+    }, [slide]);
 
     // const [state, setState] = useState({slide: 0, autoplay: false});
 
@@ -101,9 +121,16 @@ const Slider = (props) => {
 
 
 function App() {
-  return (
-        <Slider/>
-  );
+    const [slider, setSlider] = useState(true);
+
+
+    return (
+        <>
+            <button onClick={() => setSlider(false)}>Click</button>
+            {slider ? <Slider/> : null}
+        </>
+            
+    );
 }
 
 export default App;
